@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CoffeeEShop.Domain.DomainModels
 {
-    public class Order
+    public class Order : BaseEntity
     {
         public string? OwnerId { get; set; }
         public SystemUser? Owner { get; set; }

@@ -1,13 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.35825.156 d17.13
+VisualStudioVersion = 17.13.35825.156
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CoffeeEShopApp", "CoffeeEShopApp", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoffeeEShop.Web", "CoffeeEShop.Web\CoffeeEShop.Web.csproj", "{590D9FE7-CDA6-4179-A12F-CFC2F506BCC5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoffeeEShop.Domain", "CoffeeEShop.Domain\CoffeeEShop.Domain.csproj", "{DFD26129-D9EA-4861-BC9C-72E2FCFF1039}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoffeeEShop.Repository", "CoffeeEShop.Repository\CoffeeEShop.Repository.csproj", "{F9B8FBD0-347B-4AC7-A451-816395513AAD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoffeeEShop.Service", "CoffeeEShop.Service\CoffeeEShop.Service.csproj", "{F84F0E98-BDCF-43C1-B6AE-91CEA4FE144A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,6 +27,14 @@ Global
 		{DFD26129-D9EA-4861-BC9C-72E2FCFF1039}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DFD26129-D9EA-4861-BC9C-72E2FCFF1039}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DFD26129-D9EA-4861-BC9C-72E2FCFF1039}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F9B8FBD0-347B-4AC7-A451-816395513AAD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F9B8FBD0-347B-4AC7-A451-816395513AAD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F9B8FBD0-347B-4AC7-A451-816395513AAD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F9B8FBD0-347B-4AC7-A451-816395513AAD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F84F0E98-BDCF-43C1-B6AE-91CEA4FE144A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F84F0E98-BDCF-43C1-B6AE-91CEA4FE144A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F84F0E98-BDCF-43C1-B6AE-91CEA4FE144A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F84F0E98-BDCF-43C1-B6AE-91CEA4FE144A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -30,6 +42,8 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{590D9FE7-CDA6-4179-A12F-CFC2F506BCC5} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{DFD26129-D9EA-4861-BC9C-72E2FCFF1039} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{F9B8FBD0-347B-4AC7-A451-816395513AAD} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{F84F0E98-BDCF-43C1-B6AE-91CEA4FE144A} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {130885CF-96C0-49EE-B050-6DE5360A0498}

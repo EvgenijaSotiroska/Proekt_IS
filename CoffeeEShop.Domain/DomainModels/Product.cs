@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CoffeeEShop.Domain.DomainModels
 {
-    public class Product
+    public class Product : BaseEntity
     {
         [Required]
         public string? Name { get; set; }

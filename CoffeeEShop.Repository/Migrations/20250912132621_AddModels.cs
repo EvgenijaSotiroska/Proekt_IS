@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace CoffeeEShop.Web.Data.Migrations
+namespace CoffeeEShop.Repository.Migrations
 {
     /// <inheritdoc />
     public partial class AddModels : Migration

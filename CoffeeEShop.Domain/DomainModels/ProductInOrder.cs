@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CoffeeEShop.Domain.DomainModels
 {
-    public class ProductInOrder
+    public class ProductInOrder : BaseEntity
     {
         public Guid ProductId { get; set; }
         public Product? Product { get; set; }

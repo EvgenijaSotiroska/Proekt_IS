@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace CoffeeEShop.Web.Data.Migrations
+namespace CoffeeEShop.Repository.Migrations
 {
     public partial class CreateIdentitySchema : Migration
     {

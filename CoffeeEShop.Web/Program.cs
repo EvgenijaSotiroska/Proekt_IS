@@ -1,7 +1,11 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using CoffeeEShop.Web.Data;
 using CoffeeEShop.Domain.Identity;
+using CoffeeEShop.Repository;
+using CoffeeEShop.Repository.Implementation;
+using CoffeeEShop.Repository.Interface;
+using CoffeeEShop.Service.Implementation;
+using CoffeeEShop.Service.Interface;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +17,15 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<SystemUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>();
+
+
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+
+
+builder.Services.AddTransient<IProductService, ProductService>();
+builder.Services.AddTransient<ICoffeeShopService, CoffeeShopService>();
+builder.Services.AddTransient<IOrderService, OrderService>();
+
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();

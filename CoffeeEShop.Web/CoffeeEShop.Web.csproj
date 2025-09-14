@@ -27,6 +27,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CoffeeEShop.Domain\CoffeeEShop.Domain.csproj" />
+    <ProjectReference Include="..\CoffeeEShop.Repository\CoffeeEShop.Repository.csproj" />
+    <ProjectReference Include="..\CoffeeEShop.Service\CoffeeEShop.Service.csproj" />
   </ItemGroup>
 
 </Project>
