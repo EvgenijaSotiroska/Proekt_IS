@@ -48,7 +48,7 @@ namespace CoffeeEShop.Service.Implementation
 
             if (existingProduct == null)
             {
-                var productInShoppingCart = new ProductInOrder
+                var productInOrder = new ProductInOrder
                 {
                     Id = Guid.NewGuid(),
                     ProductId = product.Id,
@@ -58,7 +58,7 @@ namespace CoffeeEShop.Service.Implementation
                     Quantity = quantity
                 };
 
-                _productInOrderRepository.Insert(productInShoppingCart);
+                _productInOrderRepository.Insert(productInOrder);
             }
             else
             {

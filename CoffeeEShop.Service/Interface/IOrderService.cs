@@ -9,8 +9,7 @@ namespace CoffeeEShop.Service.Interface
 {
     public interface IOrderService
     {
-        List<Order> GetAllOrders();
-        Order GetOrder(Guid Id);
         Order? GetByUserId(Guid userId);
+        void CompleteOrder(Order order);
     }
 }

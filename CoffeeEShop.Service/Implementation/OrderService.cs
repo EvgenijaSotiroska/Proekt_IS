@@ -12,15 +12,12 @@ namespace CoffeeEShop.Service.Implementation
     public class OrderService : IOrderService
     {
         private readonly IRepository<Order> _orderRepository;
-        public OrderService (IRepository<Order> orderRepository)
+        private readonly IRepository<ProductInOrder> _productInOrderRepository;
+        public OrderService (IRepository<Order> orderRepository, IRepository<ProductInOrder> productInOrder)
         {
             _orderRepository = orderRepository;
-        }
+            _productInOrderRepository = productInOrder;
 
-
-        public List<Order> GetAllOrders()
-        {
-            throw new NotImplementedException();
         }
 
         public Order? GetByUserId(Guid userId)
@@ -30,9 +27,19 @@ namespace CoffeeEShop.Service.Implementation
         
         }
 
-        public Order GetOrder(Guid Id)
+        public void CompleteOrder(Order order)
         {
-            throw new NotImplementedException();
+            var items = _productInOrderRepository.GetAll(
+                                                    selector: x => x,
+                                                    predicate: pio => pio.OrderId == order.Id
+                                                     );
+
+            foreach (var item in items)
+            {
+                _productInOrderRepository.Delete(item);
+            }
         }
+
+       
     }
 }
