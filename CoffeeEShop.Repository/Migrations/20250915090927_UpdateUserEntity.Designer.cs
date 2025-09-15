@@ -4,6 +4,7 @@ using CoffeeEShop.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CoffeeEShop.Repository.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250915090927_UpdateUserEntity")]
+    partial class UpdateUserEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -31,11 +34,16 @@ namespace CoffeeEShop.Repository.Migrations
                     b.Property<string>("OwnerId")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<Guid?>("UserOrderId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
                     b.HasIndex("OwnerId")
                         .IsUnique()
                         .HasFilter("[OwnerId] IS NOT NULL");
+
+                    b.HasIndex("UserOrderId");
 
                     b.ToTable("Orders");
                 });
@@ -344,7 +352,13 @@ namespace CoffeeEShop.Repository.Migrations
                         .WithOne("UserOrder")
                         .HasForeignKey("CoffeeEShop.Domain.DomainModels.Order", "OwnerId");
 
+                    b.HasOne("CoffeeEShop.Domain.DomainModels.Order", "UserOrder")
+                        .WithMany()
+                        .HasForeignKey("UserOrderId");
+
                     b.Navigation("Owner");
+
+                    b.Navigation("UserOrder");
                 });
 
             modelBuilder.Entity("CoffeeEShop.Domain.DomainModels.ProductInCoffeeShop", b =>

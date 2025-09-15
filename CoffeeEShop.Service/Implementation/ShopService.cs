@@ -9,16 +9,16 @@ using System.Threading.Tasks;
 
 namespace CoffeeEShop.Service.Implementation
 {
-    public class CoffeeShopService : ICoffeeShopService
+    public class ShopService : IShopService
     {
-        private readonly IRepository<CoffeeShop> _coffeeShopRepository;
+        private readonly IRepository<Shop> _coffeeShopRepository;
 
-        public CoffeeShopService(IRepository<CoffeeShop> coffeeShopRepository)
+        public ShopService(IRepository<Shop> coffeeShopRepository)
         {
             _coffeeShopRepository = coffeeShopRepository;
         }
 
-        public CoffeeShop DeleteById(Guid id)
+        public Shop DeleteById(Guid id)
         {
             var coffeeShop = GetById(id);
             if (coffeeShop == null)
@@ -29,24 +29,24 @@ namespace CoffeeEShop.Service.Implementation
             return coffeeShop;
         }
 
-        public List<CoffeeShop> GetAll()
+        public List<Shop> GetAll()
         {
             return _coffeeShopRepository.GetAll(selector: x => x).ToList();
         }
 
-        public CoffeeShop? GetById(Guid id)
+        public Shop? GetById(Guid id)
         {
             return _coffeeShopRepository.Get(selector: x => x,
                                          predicate: x => x.Id.Equals(id));
         }
 
-        public CoffeeShop Insert(CoffeeShop shop)
+        public Shop Insert(Shop shop)
         {
             shop.Id = Guid.NewGuid();
             return _coffeeShopRepository.Insert(shop);
         }
 
-        public CoffeeShop Update(CoffeeShop shop)
+        public Shop Update(Shop shop)
         {
             return _coffeeShopRepository.Update(shop);
         }

@@ -4,6 +4,7 @@ using CoffeeEShop.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CoffeeEShop.Repository.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250914155704_Add-layers")]
+    partial class Addlayers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,6 +24,29 @@ namespace CoffeeEShop.Repository.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("CoffeeEShop.Domain.DomainModels.CoffeeShop", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double?>("Rating")
+                        .IsRequired()
+                        .HasColumnType("float");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CoffeeShops");
+                });
 
             modelBuilder.Entity("CoffeeEShop.Domain.DomainModels.Order", b =>
                 {
@@ -31,11 +57,14 @@ namespace CoffeeEShop.Repository.Migrations
                     b.Property<string>("OwnerId")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<Guid?>("UserOrderId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("OwnerId")
-                        .IsUnique()
-                        .HasFilter("[OwnerId] IS NOT NULL");
+                    b.HasIndex("OwnerId");
+
+                    b.HasIndex("UserOrderId");
 
                     b.ToTable("Orders");
                 });
@@ -99,9 +128,6 @@ namespace CoffeeEShop.Repository.Migrations
                     b.Property<Guid>("ProductId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("OrderId");
@@ -109,29 +135,6 @@ namespace CoffeeEShop.Repository.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("ProductInOrder");
-                });
-
-            modelBuilder.Entity("CoffeeEShop.Domain.DomainModels.Shop", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<double?>("Rating")
-                        .IsRequired()
-                        .HasColumnType("float");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("CoffeeShops");
                 });
 
             modelBuilder.Entity("CoffeeEShop.Domain.Identity.SystemUser", b =>
@@ -341,15 +344,21 @@ namespace CoffeeEShop.Repository.Migrations
             modelBuilder.Entity("CoffeeEShop.Domain.DomainModels.Order", b =>
                 {
                     b.HasOne("CoffeeEShop.Domain.Identity.SystemUser", "Owner")
-                        .WithOne("UserOrder")
-                        .HasForeignKey("CoffeeEShop.Domain.DomainModels.Order", "OwnerId");
+                        .WithMany()
+                        .HasForeignKey("OwnerId");
+
+                    b.HasOne("CoffeeEShop.Domain.DomainModels.Order", "UserOrder")
+                        .WithMany()
+                        .HasForeignKey("UserOrderId");
 
                     b.Navigation("Owner");
+
+                    b.Navigation("UserOrder");
                 });
 
             modelBuilder.Entity("CoffeeEShop.Domain.DomainModels.ProductInCoffeeShop", b =>
                 {
-                    b.HasOne("CoffeeEShop.Domain.DomainModels.Shop", "CoffeeShop")
+                    b.HasOne("CoffeeEShop.Domain.DomainModels.CoffeeShop", "CoffeeShop")
                         .WithMany("AllProducts")
                         .HasForeignKey("CoffeeShopId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -436,6 +445,11 @@ namespace CoffeeEShop.Repository.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("CoffeeEShop.Domain.DomainModels.CoffeeShop", b =>
+                {
+                    b.Navigation("AllProducts");
+                });
+
             modelBuilder.Entity("CoffeeEShop.Domain.DomainModels.Order", b =>
                 {
                     b.Navigation("AllProducts");
@@ -446,16 +460,6 @@ namespace CoffeeEShop.Repository.Migrations
                     b.Navigation("AllCoffeeShops");
 
                     b.Navigation("AllOrders");
-                });
-
-            modelBuilder.Entity("CoffeeEShop.Domain.DomainModels.Shop", b =>
-                {
-                    b.Navigation("AllProducts");
-                });
-
-            modelBuilder.Entity("CoffeeEShop.Domain.Identity.SystemUser", b =>
-                {
-                    b.Navigation("UserOrder");
                 });
 #pragma warning restore 612, 618
         }

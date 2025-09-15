@@ -23,7 +23,7 @@ builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
 
 builder.Services.AddTransient<IProductService, ProductService>();
-builder.Services.AddTransient<ICoffeeShopService, CoffeeShopService>();
+builder.Services.AddTransient<IShopService, ShopService>();
 builder.Services.AddTransient<IOrderService, OrderService>();
 
 builder.Services.AddControllersWithViews();

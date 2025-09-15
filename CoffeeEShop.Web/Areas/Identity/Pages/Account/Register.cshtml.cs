@@ -19,6 +19,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using CoffeeEShop.Domain.DomainModels;
 
 namespace CoffeeEShop.Web.Areas.Identity.Pages.Account
 {
@@ -124,6 +125,13 @@ namespace CoffeeEShop.Web.Areas.Identity.Pages.Account
 
                 user.FirstName = Input.FirstName;
                 user.LastName = Input.LastName;
+                user.UserOrder = new Order
+                {
+                    Id = Guid.NewGuid(),
+                    OwnerId = user.Id,
+                    Owner = user,
+                    AllProducts = new List<ProductInOrder>()
+                };
 
                 var result = await _userManager.CreateAsync(user, Input.Password);
 

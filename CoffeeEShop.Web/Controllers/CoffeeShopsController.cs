@@ -14,9 +14,9 @@ namespace CoffeeEShop.Web.Controllers
 {
     public class CoffeeShopsController : Controller
     {
-        private readonly CoffeeShopService _coffeeShopService;
+        private readonly IShopService _coffeeShopService;
 
-        public CoffeeShopsController(CoffeeShopService coffeeShopService)
+        public CoffeeShopsController(IShopService coffeeShopService)
         {
             _coffeeShopService = coffeeShopService;
         }
@@ -55,7 +55,7 @@ namespace CoffeeEShop.Web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create([Bind("Name,Address,Rating,Id")] CoffeeShop coffeeShop)
+        public IActionResult Create([Bind("Name,Address,Rating,Id")] Shop coffeeShop)
         {
             if (ModelState.IsValid)
             {
@@ -87,7 +87,7 @@ namespace CoffeeEShop.Web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Guid id, [Bind("Name,Address,Rating,Id")] CoffeeShop coffeeShop)
+        public IActionResult Edit(Guid id, [Bind("Name,Address,Rating,Id")] Shop coffeeShop)
         {
             if (id != coffeeShop.Id)
             {

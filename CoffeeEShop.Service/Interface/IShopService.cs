@@ -7,10 +7,12 @@ using System.Threading.Tasks;
 
 namespace CoffeeEShop.Service.Interface
 {
-    public interface IOrderService
+    public interface IShopService
     {
-        List<Order> GetAllOrders();
-        Order GetOrder(Guid Id);
-        Order? GetByUserId(Guid userId);
+        List<Shop> GetAll();
+        Shop? GetById(Guid id);
+        Shop Insert(Shop shop);
+        Shop Update(Shop shop);
+        Shop DeleteById(Guid id);
     }
 }

@@ -23,6 +23,13 @@ namespace CoffeeEShop.Service.Implementation
             throw new NotImplementedException();
         }
 
+        public Order? GetByUserId(Guid userId)
+        {
+            return _orderRepository.Get(selector: x => x,
+                                          predicate: x => x.OwnerId.Equals(userId.ToString()));
+        
+        }
+
         public Order GetOrder(Guid Id)
         {
             throw new NotImplementedException();

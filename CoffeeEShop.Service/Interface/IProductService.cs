@@ -1,4 +1,5 @@
 ﻿using CoffeeEShop.Domain.DomainModels;
+using CoffeeEShop.Domain.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,5 +15,7 @@ namespace CoffeeEShop.Service.Interface
         Product Insert(Product product);
         Product Update(Product product);
         Product DeleteById(Guid id);
+        AddToOrderDTO GetSelectedProduct(Guid id);
+        void AddProductToOrder(Guid id, Guid userId, int quantity);
     }
 }

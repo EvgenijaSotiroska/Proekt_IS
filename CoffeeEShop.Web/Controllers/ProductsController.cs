@@ -8,14 +8,17 @@ using Microsoft.EntityFrameworkCore;
 using CoffeeEShop.Domain.DomainModels;
 using CoffeeEShop.Repository;
 using CoffeeEShop.Service.Implementation;
+using CoffeeEShop.Service.Interface;
+using System.Security.Claims;
+using CoffeeEShop.Domain.DTO;
 
 namespace CoffeeEShop.Web.Controllers
 {
     public class ProductsController : Controller
     {
-        private readonly ProductService _productService;
+        private readonly IProductService _productService;
 
-        public ProductsController(ProductService productService)
+        public ProductsController(IProductService productService)
         {
             _productService = productService;
         }
@@ -125,5 +128,18 @@ namespace CoffeeEShop.Web.Controllers
         }
 
 
+        public IActionResult AddProductToOrder(Guid id)
+        {
+            AddToOrderDTO model = _productService.GetSelectedProduct(id);
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult AddProductToOrder(AddToOrderDTO model)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            _productService.AddProductToOrder(model.SelectedProductId, Guid.Parse(userId), model.Quantity);
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

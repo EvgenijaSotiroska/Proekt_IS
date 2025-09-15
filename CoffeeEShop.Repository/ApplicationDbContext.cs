@@ -13,7 +13,7 @@ public class ApplicationDbContext : IdentityDbContext<SystemUser>
     }
 
     public virtual DbSet<Product> Products { get; set; }
-    public virtual DbSet<CoffeeShop> CoffeeShops { get; set; }
+    public virtual DbSet<Domain.DomainModels.Shop> CoffeeShops { get; set; }
     public virtual DbSet<Order> Orders { get; set; }
     public virtual DbSet<ProductInCoffeeShop> ProductInCoffeeShops { get; set; }
     public virtual DbSet<ProductInOrder> ProductInOrder { get; set; }

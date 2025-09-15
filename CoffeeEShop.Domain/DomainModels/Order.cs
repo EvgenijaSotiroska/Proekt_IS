@@ -12,6 +12,5 @@ namespace CoffeeEShop.Domain.DomainModels
         public string? OwnerId { get; set; }
         public SystemUser? Owner { get; set; }
         public virtual ICollection<ProductInOrder>? AllProducts { get; set; }
-        public Order? UserOrder { get; set; }
     }
 }
