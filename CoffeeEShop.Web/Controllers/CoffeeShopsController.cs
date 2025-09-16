@@ -9,16 +9,20 @@ using CoffeeEShop.Domain.DomainModels;
 using CoffeeEShop.Repository;
 using CoffeeEShop.Service.Implementation;
 using CoffeeEShop.Service.Interface;
+using CoffeeEShop.Repository.Interface;
+using CoffeeEShop.Domain.ViewModels;
 
 namespace CoffeeEShop.Web.Controllers
 {
     public class CoffeeShopsController : Controller
     {
         private readonly IShopService _coffeeShopService;
+        private readonly IRepository<ProductInCoffeeShop> _productInCoffeeShopRepository;   
 
-        public CoffeeShopsController(IShopService coffeeShopService)
+        public CoffeeShopsController(IShopService coffeeShopService, IRepository<ProductInCoffeeShop> productInCoffeeShopRepository)
         {
             _coffeeShopService = coffeeShopService;
+            _productInCoffeeShopRepository = productInCoffeeShopRepository;
         }
 
         // GET: CoffeeShops
@@ -41,7 +45,19 @@ namespace CoffeeEShop.Web.Controllers
                 return NotFound();
             }
 
-            return View(coffeeShop);
+            var products = _productInCoffeeShopRepository.GetAll(
+                selector: x => x.Product,
+                predicate: p => p.CoffeeShopId == id
+            ).ToList();
+
+            var model = new ShopDetailsViewModel
+            {
+                Shop = coffeeShop,
+                Products = products
+            };
+
+            return View(model);
+
         }
 
         // GET: CoffeeShops/Create
@@ -125,6 +141,8 @@ namespace CoffeeEShop.Web.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+   
 
     }
 }

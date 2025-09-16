@@ -17,5 +17,6 @@ namespace CoffeeEShop.Service.Interface
         Product DeleteById(Guid id);
         AddToOrderDTO GetSelectedProduct(Guid id);
         void AddProductToOrder(Guid id, Guid userId, int quantity);
+        Product GetProductWithShops(Guid id);
     }
 }

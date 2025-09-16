@@ -9,6 +9,7 @@ using CoffeeEShop.Domain.DomainModels;
 using CoffeeEShop.Repository;
 using CoffeeEShop.Service.Implementation;
 using CoffeeEShop.Service.Interface;
+using CoffeeEShop.Repository.Interface;
 using System.Security.Claims;
 using CoffeeEShop.Domain.DTO;
 
@@ -17,10 +18,12 @@ namespace CoffeeEShop.Web.Controllers
     public class ProductsController : Controller
     {
         private readonly IProductService _productService;
+        private readonly IRepository<ProductInCoffeeShop> _productInCoffeeShopRepository;
 
-        public ProductsController(IProductService productService)
+        public ProductsController(IProductService productService, IRepository<ProductInCoffeeShop> productInCoffeeShopRepository)
         {
             _productService = productService;
+            _productInCoffeeShopRepository = productInCoffeeShopRepository;
         }
 
         // GET: Products
@@ -37,7 +40,7 @@ namespace CoffeeEShop.Web.Controllers
                 return NotFound();
             }
 
-            var product = _productService.GetById(id);
+            var product = _productService.GetProductWithShops(id);
             if (product == null)
             {
                 return NotFound();
@@ -47,8 +50,9 @@ namespace CoffeeEShop.Web.Controllers
         }
 
         // GET: Products/Create
-        public IActionResult Create()
+        public IActionResult Create(Guid? shopId)
         {
+            ViewBag.ShopId = shopId;
             return View();
         }
 
@@ -57,12 +61,24 @@ namespace CoffeeEShop.Web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public  IActionResult Create([Bind("Name,Description,Image,Price,Id")] Product product)
+        public  IActionResult Create([Bind("Name,Description,Image,Price,Id")] Product product, Guid? shopId)
         {
             if (ModelState.IsValid)
             {
                 product.Id = Guid.NewGuid();
                 _productService.Insert(product);
+                if (shopId.HasValue)
+                {
+                    var relation = new ProductInCoffeeShop
+                    {
+                        Id = Guid.NewGuid(),
+                        CoffeeShopId = shopId.Value,
+                        ProductId = product.Id
+                    };
+
+                    _productInCoffeeShopRepository.Insert(relation);
+                    return RedirectToAction("Details", "CoffeeShops", new { id = shopId.Value });
+                }
                 return RedirectToAction(nameof(Index));
             }
             return View(product);

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace CoffeeEShop.Service.Implementation
 {
@@ -85,6 +86,16 @@ namespace CoffeeEShop.Service.Implementation
             };
 
             return addProductToOrderModel;
+        }
+
+        public Product GetProductWithShops(Guid id)
+        {
+            return _productRepository.GetAll(
+                                      selector: p => p,
+                                      predicate: p => p.Id == id, 
+                                      include: query => query.Include(p => p.AllCoffeeShops)
+                                     .ThenInclude(pc => pc.CoffeeShop))
+                                     .FirstOrDefault();
         }
         public Product DeleteById(Guid id)
         {
