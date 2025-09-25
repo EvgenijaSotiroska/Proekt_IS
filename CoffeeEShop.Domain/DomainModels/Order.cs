@@ -12,5 +12,7 @@ namespace CoffeeEShop.Domain.DomainModels
         public string? OwnerId { get; set; }
         public SystemUser? Owner { get; set; }
         public virtual ICollection<ProductInOrder>? AllProducts { get; set; }
+        public string Status { get; set; } = "Pending";
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }
 }

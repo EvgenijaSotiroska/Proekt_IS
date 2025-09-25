@@ -11,5 +11,10 @@ namespace CoffeeEShop.Service.Interface
     {
         Order? GetByUserId(Guid userId);
         void CompleteOrder(Order order);
+        Order Update(Order order);
+        string? GetStatus(Guid orderId);
+        bool UpdateStatus(Guid orderId, string status);
+        IEnumerable<Order> GetAllNonDeliveredOrders();
+        Order? GetById(Guid id);
     }
 }

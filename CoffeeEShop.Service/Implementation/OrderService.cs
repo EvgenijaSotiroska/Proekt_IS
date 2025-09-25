@@ -40,6 +40,47 @@ namespace CoffeeEShop.Service.Implementation
             }
         }
 
-       
+        public Order Update(Order order)
+        {
+            return _orderRepository.Update(order);
+        }
+
+        public string? GetStatus(Guid orderId)
+        {
+            var order = _orderRepository.Get(
+                selector: x => x,
+                predicate: x => x.Id == orderId
+            );
+
+            return order?.Status;
+        }
+
+        public bool UpdateStatus(Guid orderId, string status)
+        {
+            var order = _orderRepository.Get(
+                selector: x => x,
+                predicate: x => x.Id == orderId
+            );
+
+            if (order == null) return false;
+
+            order.Status = status;
+            _orderRepository.Update(order);
+            return true;
+        }
+
+        public IEnumerable<Order> GetAllNonDeliveredOrders()
+        {
+            return _orderRepository.GetAll(
+                selector: x => x,
+                predicate: x => x.Status != "Delivered"
+            );
+        }
+
+        public Order? GetById(Guid id)
+        {
+            return _orderRepository.Get(selector: x => x,
+                                          predicate: x => x.Id.Equals(id));
+        }
     }
 }

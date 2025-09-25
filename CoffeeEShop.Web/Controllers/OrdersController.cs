@@ -64,8 +64,19 @@ namespace CoffeeEShop.Web.Controllers
             if (order != null)
             {
                 _orderService.CompleteOrder(order);
+                order.Status = "Pending";
+                order.CreatedAt = DateTime.UtcNow;
+                _orderService.Update(order);
+                return RedirectToAction("Track", "Orders", new { id = order.Id });
             }
             return RedirectToAction("Index", "Products");
         }
+
+        public async Task<IActionResult> Track(Guid id)
+        {
+            var order = _orderService.GetById(id);
+            if (order == null) return NotFound();
+            return View(order);
         }
+    }
 }

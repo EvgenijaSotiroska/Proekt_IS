@@ -26,6 +26,9 @@ builder.Services.AddTransient<IProductService, ProductService>();
 builder.Services.AddTransient<IShopService, ShopService>();
 builder.Services.AddTransient<IOrderService, OrderService>();
 
+builder.Services.AddHostedService<OrderStatusService>();
+
+
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
