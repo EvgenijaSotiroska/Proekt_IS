@@ -5,56 +5,121 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Details</h1>
+<style>
+    .details-container {
+        max-width: 800px;
+        margin: 30px auto;
+        display: flex;
+        gap: 20px;
+        background-color: #fdf6f0; 
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
 
+    .details-image {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
 
-
-<div>
-    <h4>Product</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Image)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Image)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Price)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Price)
-        </dd>
-    </dl>
-</div>
-
-<h4>Available in Shops</h4>
-@if (Model.AllCoffeeShops != null && Model.AllCoffeeShops.Any())
-{
-    <ul>
-        @foreach (var shop in Model.AllCoffeeShops)
-        {
-            <li>@shop.CoffeeShop.Name</li>
+        .details-image img {
+            max-width: 100%;
+            max-height: 400px;
+            border: 3px solid #6f4e37; 
+            border-radius: 10px;
+            object-fit: contain;
         }
-    </ul>
-}
-else
-{
-    <p>This product is not available in any shops.</p>
-}
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+
+    .details-info {
+        flex: 2;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+        .details-info h2 {
+            color: #6f4e37; /* brown */
+            margin-top: 0;
+        }
+
+        .details-info p {
+            color: #3e2c20; /* darker brown text */
+            margin: 5px 0;
+        }
+
+    .shops-list {
+        padding-left: 20px;
+        color: #3e2c20;
+    }
+
+    .details-buttons {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        margin-top: 20px;
+    }
+
+    /* Button colors in beige/brown palette */
+    .btn-edit {
+        background-color: #6f4e37; /* dark brown */
+        border: none;
+        padding: 8px 15px;
+        border-radius: 5px;
+        color: #fdf6f0; /* beige text */
+        text-decoration: none;
+    }
+
+    .btn-back {
+        background-color: #d9c5b2; /* light beige */
+        border: none;
+        padding: 8px 15px;
+        border-radius: 5px;
+        color: #6f4e37; /* brown text */
+        text-decoration: none;
+    }
+
+        .btn-edit:hover, .btn-back:hover {
+            opacity: 0.9;
+        }
+</style>
+
+<div class="details-container">
+    <div class="details-image">
+        @if (!string.IsNullOrEmpty(Model.Image))
+        {
+            <img src="@Model.Image" alt="@Model.Name" />
+        }
+        else
+        {
+            <span>No image available</span>
+        }
+    </div>
+    <div class="details-info">
+        <div>
+            <h2>@Model.Name</h2>
+            <p><strong>Description:</strong> @Model.Description</p>
+            <p><strong>Price:</strong> $@Model.Price</p>
+
+            <h4>Available in Shops</h4>
+            @if (Model.AllCoffeeShops != null && Model.AllCoffeeShops.Any())
+            {
+                <ul class="shops-list">
+                    @foreach (var shop in Model.AllCoffeeShops)
+                    {
+                        <li>@shop.CoffeeShop.Name</li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p>This product is not available in any shops.</p>
+            }
+        </div>
+        <div class="details-buttons">
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn-edit">Edit</a>
+            <a asp-action="Index" class="btn-back">Back to List</a>
+        </div>
+    </div>
 </div>

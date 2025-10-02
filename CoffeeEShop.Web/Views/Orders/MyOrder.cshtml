@@ -1,43 +1,92 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@model List<CoffeeEShop.Domain.DTO.OrderDTO>
 
-@model List<CoffeeEShop.Domain.DTO.OrderDTO>
+<style>
+    .cart-container {
+        background-color: #f5f0e6; /* light beige */
+        padding: 20px;
+        border-radius: 12px;
+        max-width: 700px;
+        margin: auto;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
 
-<h2>My Order</h2>
+    .cart-header {
+        color: #5c3d2e; /* dark coffee brown */
+        border-bottom: 2px solid #d2b48c; /* tan */
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+    }
 
-@if (!Model.Any())
-{
-    <p>Your order is empty.</p>
-}
-else
-{
-    <form asp-action="PlaceOrder" method="post">
-        <button type="submit" class="btn btn-success mb-3">Place Order</button>
-    </form>
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Product</th>
-                <th>Quantity</th>
-                <th>Price</th>
-                <th>Total</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>@item.SelectedProductName</td>
-                    <td>@item.Quantity</td>
-                    <td>@item.Price$</td>
-                    <td>@(item.Price * item.Quantity)$</td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    .cart-item {
+        background-color: #fffaf3; /* very light cream */
+        border: 1px solid #d2b48c; /* tan */
+        border-radius: 8px;
+        padding: 12px 16px;
+        margin-bottom: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
 
-    <h3>Total: @Model.Sum(i => i.Price * i.Quantity)$</h3>
-}
+        .cart-item strong {
+            color: #5c3d2e;
+        }
+
+    .cart-total {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-top: 2px solid #d2b48c;
+        padding-top: 15px;
+        margin-top: 20px;
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: #3e2723; /* deep brown */
+    }
+
+    .btn-coffee {
+        background-color: #8b5e3c;
+        border: none;
+        color: #fff;
+        padding: 10px 18px;
+        border-radius: 8px;
+        transition: background 0.3s;
+    }
+
+        .btn-coffee:hover {
+            background-color: #6f4e37; /* darker coffee */
+        }
+</style>
+
+<div class="cart-container">
+    <h2 class="cart-header">☕ My Cart</h2>
+
+    @if (!Model.Any())
+    {
+        <p>Your cart is empty.</p>
+    }
+    else
+    {
+       
+
+        @foreach (var item in Model)
+        {
+            <div class="cart-item">
+                <div>
+                    <strong>@item.SelectedProductName</strong> × @item.Quantity
+                </div>
+                <div>
+                    @(item.Price * item.Quantity)$
+                </div>
+            </div>
+        }
+
+        <div class="cart-total">
+            <span>Total</span>
+            <span>@Model.Sum(i => i.Price * i.Quantity)$</span>
+        </div>
+        <form asp-action="PlaceOrder" method="post" class="mb-3">
+            <button type="submit" class="btn btn-coffee">Place Order</button>
+        </form>
+    }
+</div>

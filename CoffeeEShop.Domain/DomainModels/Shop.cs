@@ -16,5 +16,7 @@ namespace CoffeeEShop.Domain.DomainModels
         [Required]
         public double? Rating { get; set; }
         public virtual ICollection<ProductInCoffeeShop>? AllProducts { get; set; }
+        public string? Image { get; set; }
+
     }
 }

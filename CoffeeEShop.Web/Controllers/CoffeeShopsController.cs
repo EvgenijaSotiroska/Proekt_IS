@@ -17,12 +17,14 @@ namespace CoffeeEShop.Web.Controllers
     public class CoffeeShopsController : Controller
     {
         private readonly IShopService _coffeeShopService;
+        private readonly IProductService _productService;
         private readonly IRepository<ProductInCoffeeShop> _productInCoffeeShopRepository;   
 
-        public CoffeeShopsController(IShopService coffeeShopService, IRepository<ProductInCoffeeShop> productInCoffeeShopRepository)
+        public CoffeeShopsController(IShopService coffeeShopService, IRepository<ProductInCoffeeShop> productInCoffeeShopRepository, IProductService productService)
         {
             _coffeeShopService = coffeeShopService;
             _productInCoffeeShopRepository = productInCoffeeShopRepository;
+            _productService = productService;
         }
 
         // GET: CoffeeShops
@@ -34,7 +36,7 @@ namespace CoffeeEShop.Web.Controllers
         // GET: CoffeeShops/Details/5
         public IActionResult Details(Guid id)
         {
-            if (id == null)
+            if (id == Guid.Empty)
             {
                 return NotFound();
             }
@@ -45,6 +47,7 @@ namespace CoffeeEShop.Web.Controllers
                 return NotFound();
             }
 
+            // Get only products that belong to this shop
             var products = _productInCoffeeShopRepository.GetAll(
                 selector: x => x.Product,
                 predicate: p => p.CoffeeShopId == id
@@ -56,8 +59,10 @@ namespace CoffeeEShop.Web.Controllers
                 Products = products
             };
 
-            return View(model);
+            // 🔹 Add all available products for dropdown
+            ViewBag.AllProducts = _productService.GetAll();
 
+            return View(model);
         }
 
         // GET: CoffeeShops/Create
@@ -71,7 +76,7 @@ namespace CoffeeEShop.Web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create([Bind("Name,Address,Rating,Id")] Shop coffeeShop)
+        public IActionResult Create([Bind("Name,Address,Rating,Image,Id")] Shop coffeeShop)
         {
             if (ModelState.IsValid)
             {
@@ -103,7 +108,7 @@ namespace CoffeeEShop.Web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Guid id, [Bind("Name,Address,Rating,Id")] Shop coffeeShop)
+        public IActionResult Edit(Guid id, [Bind("Name,Address,Rating,Image,Id")] Shop coffeeShop)
         {
             if (id != coffeeShop.Id)
             {
@@ -142,7 +147,48 @@ namespace CoffeeEShop.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-   
+
+        public IActionResult AddProductToShop(Guid shopId)
+        {
+            // Load all products
+            var products = _productService.GetAll();
+
+            ViewBag.ShopId = shopId; // pass shop id
+            return View(products);
+        }
+
+        [HttpPost]
+        public IActionResult AddProductToShop(Guid shopId, Guid productId)
+        {
+
+            var exists = _productInCoffeeShopRepository
+                .GetAll(
+                    selector: x => x,   // we want the whole entity
+                    predicate: p => p.ProductId == productId && p.CoffeeShopId == shopId
+                )
+                .Any();
+
+            if (exists)
+            {
+                TempData["Error"] = "This product is already in the menu.";
+                return RedirectToAction("Details", new { id = shopId });
+            }
+
+            var entity = new ProductInCoffeeShop
+            {
+                Id = Guid.NewGuid(),
+                ProductId = productId,
+                CoffeeShopId = shopId
+            };
+
+            _productInCoffeeShopRepository.Insert(entity);
+
+            TempData["Success"] = "Product successfully added to the menu.";
+            return RedirectToAction("Details", new { id = shopId });
+        }
+
+
+
 
     }
 }
