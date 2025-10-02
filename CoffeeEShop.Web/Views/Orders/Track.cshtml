@@ -6,15 +6,89 @@
 
 <h2>Track Order #@Model.Id</h2>
 
+<div class="order-tracker">
+    <ul class="progressbar">
+        <li id="step-pending">Pending</li>
+        <li id="step-preparing">Preparing</li>
+        <li id="step-shipped">Shipped</li>
+        <li id="step-delivered">Delivered</li>
+    </ul>
+</div>
+
 <p>
     Current Status: <span id="order-status">@Model.Status</span>
 </p>
 
 <p>Created At: @Model.CreatedAt.ToString("g")</p>
 
+<style>
+    .order-tracker {
+        margin: 20px 0;
+    }
+
+    .progressbar {
+        counter-reset: step;
+        display: flex;
+        justify-content: space-between;
+        list-style-type: none;
+        padding: 0;
+    }
+
+        .progressbar li {
+            position: relative;
+            flex: 1;
+            text-align: center;
+            font-weight: 600;
+            color: gray;
+        }
+
+            .progressbar li:before {
+                content: counter(step);
+                counter-increment: step;
+                width: 30px;
+                height: 30px;
+                line-height: 30px;
+                border: 2px solid #ddd;
+                display: block;
+                text-align: center;
+                margin: 0 auto 10px auto;
+                border-radius: 50%;
+                background-color: white;
+            }
+
+            .progressbar li:after {
+                content: '';
+                position: absolute;
+                width: 100%;
+                height: 2px;
+                background-color: #ddd;
+                top: 15px;
+                left: -50%;
+                z-index: -1;
+            }
+
+            .progressbar li:first-child:after {
+                content: none;
+            }
+
+            .progressbar li.active {
+                color: #27ae60;
+            }
+
+           .progressbar li.active:before {
+                    border-color: #27ae60;
+                    background-color: #27ae60;
+                    color: white;
+                }
+
+           .progressbar li.active + li:after {
+                    background-color: #27ae60;
+                }
+</style>
+
 <script>
     const orderId = '@Model.Id';
-    const pollInterval = 10000; 
+    const pollInterval = 10000;
 
     async function fetchStatus() {
         try {
@@ -22,8 +96,29 @@
             if (!res.ok) return;
             const data = await res.json();
             document.getElementById('order-status').innerText = data.status;
+
+            updateProgressBar(data.status);
         } catch (err) {
             console.error('Failed to fetch order status', err);
+        }
+    }
+
+    function updateProgressBar(status) {
+        const steps = ["Pending", "Preparing", "Shipped", "Delivered"];
+        const normalized = status ? status.toLowerCase() : "";
+        steps.forEach(step => {
+            const id = `step-${step.toLowerCase()}`;
+            const el = document.getElementById(id);
+            if (el) el.classList.remove("active");
+        });
+
+        const index = steps.findIndex(s => s.toLowerCase() === normalized);
+        if (index >= 0) {
+            for (let i = 0; i <= index; i++) {
+                const id = `step-${steps[i].toLowerCase()}`;
+                const el = document.getElementById(id);
+                if (el) el.classList.add("active");
+            }
         }
     }
 

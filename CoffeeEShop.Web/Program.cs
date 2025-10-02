@@ -31,6 +31,12 @@ builder.Services.AddHostedService<OrderStatusService>();
 
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddHttpClient<DetailedProductService>(client =>
+{
+    client.BaseAddress = new Uri("https://api.coffeeworld.info/api/");
+    client.Timeout = TimeSpan.FromSeconds(10);
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

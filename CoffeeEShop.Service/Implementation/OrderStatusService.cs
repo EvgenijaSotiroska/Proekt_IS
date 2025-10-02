@@ -14,7 +14,7 @@ namespace CoffeeEShop.Service.Implementation
     {
         private readonly IServiceScopeFactory _scopeFactory;
         private readonly ILogger<OrderStatusService> _logger;
-        private readonly string[] _statuses = { "Pending", "Preparing", "On the way", "Delivered" };
+        private readonly string[] _statuses = { "Pending", "Preparing", "Shipped", "Delivered" };
 
         public OrderStatusService(IServiceScopeFactory scopeFactory, ILogger<OrderStatusService> logger)
         {
