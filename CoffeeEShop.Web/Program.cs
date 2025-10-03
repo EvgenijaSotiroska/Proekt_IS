@@ -33,7 +33,7 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddHttpClient<DetailedProductService>(client =>
 {
-    client.BaseAddress = new Uri("https://api.coffeeworld.info/api/");
+    client.BaseAddress = new Uri("https://api.sampleapis.com/coffee/");
     client.Timeout = TimeSpan.FromSeconds(10);
 });
 

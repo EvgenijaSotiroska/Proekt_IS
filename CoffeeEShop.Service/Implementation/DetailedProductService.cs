@@ -21,66 +21,39 @@ namespace CoffeeEShop.Service.Implementation
 
         public async Task<List<DetailedProduct>> GetAllCoffeesAsync()
         {
-            var response = await _httpClient.GetAsync("coffee");
-            if (!response.IsSuccessStatusCode)
-                return new List<DetailedProduct>();
+            var response = await _httpClient.GetStringAsync("iced");
 
-            var json = await response.Content.ReadAsStringAsync();
-
-            var apiList = JsonSerializer.Deserialize<List<CoffeeApiDTO>>(json, new JsonSerializerOptions
+            var apiCoffees = JsonSerializer.Deserialize<List<CoffeeApiDTO>>(response, new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true
-            });
+            }) ?? new List<CoffeeApiDTO>();
 
-            if (apiList == null) return new List<DetailedProduct>();
-
-            var coffeeDetails = apiList.Select(api =>
+            var detailedProducts = apiCoffees.Select(c => new DetailedProduct
             {
-                static string ToTitle(string s)
+                Title = c.Title,
+                Description = c.Description,
+                Ingredients = c.Ingredients
+                .Select(i => i.Replace("*", "")) // remove asterisks first
+                .Select(i =>
+                i switch
                 {
-                    if (string.IsNullOrEmpty(s)) return s;
-                    return CultureInfo.CurrentCulture.TextInfo.ToTitleCase(s.Replace("_", " "));
-                }
-
-                // Filter out ingredients with 0 g
-                var ingredientsDesc = "—";
-                if (api.Ingredients != null && api.Ingredients.Any())
-                {
-                    var nonZero = api.Ingredients
-                        .Where(kvp => kvp.Value.Min > 0 || kvp.Value.Max > 0)
-                        .ToList();
-
-                    if (nonZero.Any())
-                    {
-                        ingredientsDesc = string.Join(" + ", nonZero.Select(kvp =>
-                        {
-                            var ingName = ToTitle(kvp.Key);
-                            var r = kvp.Value;
-                            return Math.Abs(r.Min - r.Max) < 0.0001
-                                ? $"{r.Min} g {ingName}"
-                                : $"{r.Min}–{r.Max} g {ingName}";
-                        }));
-                    }
-                }
-
-                var caffeineInfo = api.Caffeine != null
-                    ? $"{api.Caffeine.Min}–{api.Caffeine.Max} mg"
-                    : "—";
-
-                var served = api.Cold == true ? "Cold" : "Hot";
-
-                return new DetailedProduct
-                {
-                    Id = Guid.NewGuid(),
-                    DisplayName = api.Name ?? ToTitle(api.Id),
-                    Origin = string.IsNullOrWhiteSpace(api.Origin) ? "—" : ToTitle(api.Origin),
-                    IngredientsDescription = ingredientsDesc,
-                    CaffeineInfo = caffeineInfo,
-                    Served = served
-                };
+                    "Coffee" => "Coffee ☕",
+                    "Espresso" => "Espresso ☕",
+                    "Long steeped coffee" => "Long steeped coffee ☕",
+                    "Ice" => "Ice 🧊",
+                    "Blended ice" => "Blended ice 🧊",
+                    "Sugar" => "Sugar 🍬",
+                    "Cream" => "Cream 🥛",
+                    "Whip" => "Whip 🍦",
+                    "Rum" => "Rum 🥃",
+                    "Lemon" => "Lemon 🍋",
+                    "Nitrogen bubbles" => "Nitrogen bubbles 💨", // fallback for bubbles
+                    _ => i
+                }).ToList(),
+                Image = c.Image
             }).ToList();
 
-            return coffeeDetails;
+            return detailedProducts;
         }
 
     }

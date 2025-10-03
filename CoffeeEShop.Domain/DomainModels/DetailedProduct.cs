@@ -8,10 +8,9 @@ namespace CoffeeEShop.Domain.DomainModels
 {
     public class DetailedProduct : BaseEntity
     {
-        public string DisplayName { get; set; }      
-        public string Origin { get; set; }                     
-        public string IngredientsDescription { get; set; } 
-        public string CaffeineInfo { get; set; }        
-        public string Served { get; set; }          
+        public string Title { get; set; }
+        public string Description { get; set; }
+        public List<string> Ingredients { get; set; }
+        public string Image { get; set; }
     }
 }

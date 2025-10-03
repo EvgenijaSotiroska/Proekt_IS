@@ -12,27 +12,27 @@
         <div class="col-md-4">
   
                 <div class="border rounded p-4 text-center">
-                    <strong>@Model.DisplayName</strong><br />
+                    <strong>@Model.Title</strong><br />
                     <small>No image available</small>
                 </div>
             
         </div>
 
         <div class="col-md-8">
-            <h2>@Model.DisplayName <small class="text-muted">(@Model.Origin)</small></h2>
+            <h2>@Model.Title></h2>
             <hr />
 
             <dl class="row">
 
-                <dt class="col-sm-4">Coffee dose</dt>
-                <dd class="col-sm-8">@Model.IngredientsDescription</dd>
+                <dt class="col-sm-4">Description</dt>
+                <dd class="col-sm-8">@Model.Description</dd>
 
-                <dt class="col-sm-4">Caffeine</dt>
-                <dd class="col-sm-8">@Model.CaffeineInfo</dd>
+                <dt class="col-sm-4">Ingredients</dt>
+                <dd class="col-sm-8">@Model.Ingredients</dd>
 
 
-                <dt class="col-sm-4">Served</dt>
-                <dd class="col-sm-8">@Model.Served</dd>
+                <dt class="col-sm-4">Image</dt>
+                <dd class="col-sm-8">@Model.Image</dd>
             </dl>
 
             <p class="mt-3">
