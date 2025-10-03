@@ -11,5 +11,6 @@ namespace CoffeeEShop.Domain.DTO
         public Guid SelectedProductId { get; set; }
         public string? SelectedProductName { get; set; }
         public int Quantity { get; set; }
+        public Guid CoffeeShopId { get; set; }
     }
 }

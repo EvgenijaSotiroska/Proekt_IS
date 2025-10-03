@@ -8,9 +8,10 @@
                 <h4 class="text-center" style="color: #6f4e37;">Add Product to Order</h4>
                 <hr style="border-color:#d9c5b2;" />
 
-                <form method="post" asp-action="AddProductToOrder">
+                <form method="post" asp-action="AddProductToOrder" asp-route-shopId="@Model.CoffeeShopId">
 
                     <input type="hidden" asp-for="SelectedProductId" />
+                    <input type="hidden" asp-for="CoffeeShopId" />
 
                     <div class="form-group mb-3">
                         <label asp-for="SelectedProductName" class="control-label" style="color: #6f4e37;"></label>
@@ -27,6 +28,7 @@
                     <div class="text-center mt-4">
                         <button type="submit" class="btn" style="background-color:#6f4e37; color:#fdf6f0; padding: 10px 20px; border-radius:5px;">Add To Order</button>
                     </div>
+                    
                 </form>
 
             </div>

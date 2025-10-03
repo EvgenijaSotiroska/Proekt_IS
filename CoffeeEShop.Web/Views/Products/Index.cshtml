@@ -102,7 +102,6 @@
 
 <div class="mb-3">
     <a asp-action="Create" class="btn btn-success">Create New</a>
-    <a asp-controller="Orders" asp-action="MyOrder" class="btn btn-info">View My Order</a>
     <a asp-controller="DetailedProducts" asp-action="AllCoffees" class="btn btn-info">View All Coffee Info</a>
 </div>
 
@@ -121,7 +120,6 @@
                     <p class="card-text"><strong>Price:</strong> $@product.Price</p>
                 </div>
                 <div class="card-footer">
-                    <a asp-controller="Products" asp-action="AddProductToOrder" asp-route-id="@product.Id" class="btn btn-info btn-sm">Add to order</a>
                     <div class="right-buttons">
                         <a asp-action="Edit" asp-route-id="@product.Id" class="btn btn-secondary btn-sm">Edit</a>
                         <a asp-action="Details" asp-route-id="@product.Id" class="btn btn-secondary btn-sm">Details</a>

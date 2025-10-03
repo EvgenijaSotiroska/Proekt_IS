@@ -72,16 +72,29 @@
     }
 
     .btn-back {
-        background-color: #d9c5b2; /* light beige */
+        background-color: #d9c5b2; 
         border: none;
         padding: 8px 15px;
         border-radius: 5px;
-        color: #6f4e37; /* brown text */
+        color: #6f4e37; 
         text-decoration: none;
     }
 
         .btn-edit:hover, .btn-back:hover {
             opacity: 0.9;
+            color: #d9c5b2;
+        }
+
+    .shop-link {
+        color: #6f4e37; 
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.2s ease, text-decoration 0.2s ease;
+    }
+
+        .shop-link:hover {
+            color: #3e2c20; 
+            text-decoration: underline;
         }
 </style>
 
@@ -108,9 +121,14 @@
                 <ul class="shops-list">
                     @foreach (var shop in Model.AllCoffeeShops)
                     {
-                        <li>@shop.CoffeeShop.Name</li>
+                        <li>
+                            <a asp-controller="CoffeeShops" asp-action="Details" asp-route-id="@shop.CoffeeShop.Id" class="shop-link">
+                                @shop.CoffeeShop.Name
+                            </a>
+                        </li>
                     }
                 </ul>
+
             }
             else
             {

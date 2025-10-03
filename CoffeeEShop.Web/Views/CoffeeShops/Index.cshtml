@@ -53,17 +53,17 @@
     }
 
     .btn-delete {
-        background-color: #d9c5b2; /* light beige */
+        background-color: #d9c5b2;
         border: none;
         padding: 6px 12px;
         border-radius: 5px;
-        color: #6f4e37; /* brown text */
+        color: #6f4e37;
         text-decoration: none;
         font-size: 0.9rem;
     }
 
     .btn-details {
-        background-color: #c49e76; /* medium brown */
+        background-color: #c49e76; 
         border: none;
         padding: 6px 12px;
         border-radius: 5px;
@@ -74,6 +74,7 @@
 
         .btn-edit:hover, .btn-delete:hover, .btn-details:hover {
             opacity: 0.9;
+            color: #d9c5b2;
         }
 </style>
 
@@ -81,6 +82,7 @@
 
 <div class="mb-3">
     <a asp-action="Create" class="btn btn-details">Create New</a>
+    <a asp-controller="Orders" asp-action="MyOrder" class="btn btn-details">View My Order</a>
 </div>
 
 <div class="row">

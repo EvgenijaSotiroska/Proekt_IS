@@ -144,9 +144,10 @@ namespace CoffeeEShop.Web.Controllers
         }
 
 
-        public IActionResult AddProductToOrder(Guid id)
+        public IActionResult AddProductToOrder(Guid id, Guid coffeeShopId)
         {
             AddToOrderDTO model = _productService.GetSelectedProduct(id);
+            model.CoffeeShopId = coffeeShopId;
             return View(model);
         }
 
@@ -155,7 +156,7 @@ namespace CoffeeEShop.Web.Controllers
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             _productService.AddProductToOrder(model.SelectedProductId, Guid.Parse(userId), model.Quantity);
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("MyOrder", "Orders");
         }
     }
 }
