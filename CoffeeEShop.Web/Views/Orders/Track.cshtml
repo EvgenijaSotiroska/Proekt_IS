@@ -4,26 +4,37 @@
     ViewBag.Title = "Track My Order";
 }
 
-<h2>Track Order #@Model.Id</h2>
+<h2 style="color:#3e2723; text-align:center; margin-bottom:20px;">
+    🚚 Track Order #@Model.Id
+</h2>
 
 <div class="order-tracker">
     <ul class="progressbar">
-        <li id="step-pending">Pending</li>
-        <li id="step-preparing">Preparing</li>
-        <li id="step-shipped">Shipped</li>
-        <li id="step-delivered">Delivered</li>
+        <li id="step-pending"><span class="icon">📝</span> Pending</li>
+        <li id="step-preparing"><span class="icon">☕</span> Preparing</li>
+        <li id="step-shipped"><span class="icon">📦</span> Shipped</li>
+        <li id="step-delivered"><span class="icon">✅</span> Delivered</li>
     </ul>
 </div>
 
-<p>
-    Current Status: <span id="order-status">@Model.Status</span>
-</p>
+<div class="order-info">
+    <p><strong>Current Status:</strong> <span id="order-status">@Model.Status</span></p>
+    <p><strong>Created At:</strong> @Model.CreatedAt.ToString("g")</p>
+    <p><strong>Delivery Address:</strong> @Model.Address</p>
+    <p><strong>Courier:</strong> John Doe (🚲 Bike Courier)</p>
+</div>
 
-<p>Created At: @Model.CreatedAt.ToString("g")</p>
+<div style="text-align:center; margin-top:20px;">
+    <form asp-controller="Orders" asp-action="CompleteOrder" method="post">
+        <input type="hidden" name="id" value="@Model.Id" />
+        <button type="submit" class="btn-done">✅ Mark as Done</button>
+    </form>
+</div>
 
 <style>
     .order-tracker {
-        margin: 20px 0;
+        margin: 30px auto;
+        max-width: 700px;
     }
 
     .progressbar {
@@ -32,58 +43,82 @@
         justify-content: space-between;
         list-style-type: none;
         padding: 0;
+        position: relative;
     }
 
-        .progressbar li {
-            position: relative;
-            flex: 1;
-            text-align: center;
-            font-weight: 600;
-            color: gray;
-        }
+    .progressbar::before {
+        content: "";
+        position: absolute;
+        top: 20px;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background-color: #ddd;
+        z-index: 0;
+    }
 
-            .progressbar li:before {
-                content: counter(step);
-                counter-increment: step;
-                width: 30px;
-                height: 30px;
-                line-height: 30px;
-                border: 2px solid #ddd;
-                display: block;
-                text-align: center;
-                margin: 0 auto 10px auto;
-                border-radius: 50%;
-                background-color: white;
-            }
+    .progressbar li {
+        position: relative;
+        flex: 1;
+        text-align: center;
+        font-weight: 600;
+        color: #999;
+        z-index: 1;
+    }
 
-            .progressbar li:after {
-                content: '';
-                position: absolute;
-                width: 100%;
-                height: 2px;
-                background-color: #ddd;
-                top: 15px;
-                left: -50%;
-                z-index: -1;
-            }
+    .progressbar li .icon {
+        display: block;
+        margin: 0 auto 8px auto;
+        font-size: 1.5rem;
+    }
 
-            .progressbar li:first-child:after {
-                content: none;
-            }
+    /* Default circle */
+    .progressbar li:before {
+        content: "";
+        width: 28px;
+        height: 28px;
+        display: block;
+        margin: 0 auto 8px auto;
+        border-radius: 50%;
+        border: 3px solid #ddd;
+        background-color: #fff;
+    }
 
-            .progressbar li.active {
-                color: #27ae60;
-            }
+    /* Completed steps */
+    .progressbar li.completed {
+        color: #27ae60;
+    }
+    .progressbar li.completed:before {
+        border-color: #27ae60;
+        background-color: #27ae60;
+    }
 
-           .progressbar li.active:before {
-                    border-color: #27ae60;
-                    background-color: #27ae60;
-                    color: white;
-                }
+    /* Current step */
+    .progressbar li.current {
+        color: #f39c12;
+    }
+    .progressbar li.current:before {
+        border-color: #f39c12;
+        background-color: #f39c12;
+    }
 
-           .progressbar li.active + li:after {
-                    background-color: #27ae60;
-                }
+    /* Progress line fill */
+    .progressbar li.completed ~ li:before {
+        border-color: #ddd;
+        background-color: #fff;
+    }
+
+    .order-info {
+        background: #fffaf3;
+        border: 1px solid #d2b48c;
+        border-radius: 12px;
+        padding: 15px 20px;
+        max-width: 600px;
+        margin: 20px auto;
+        color: #3e2723;
+        font-size: 1rem;
+        box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+    }
 </style>
 
 <script>
@@ -96,7 +131,6 @@
             if (!res.ok) return;
             const data = await res.json();
             document.getElementById('order-status').innerText = data.status;
-
             updateProgressBar(data.status);
         } catch (err) {
             console.error('Failed to fetch order status', err);
@@ -109,16 +143,23 @@
         steps.forEach(step => {
             const id = `step-${step.toLowerCase()}`;
             const el = document.getElementById(id);
-            if (el) el.classList.remove("active");
+            if (el) {
+                el.classList.remove("completed", "current");
+            }
         });
 
         const index = steps.findIndex(s => s.toLowerCase() === normalized);
+
         if (index >= 0) {
-            for (let i = 0; i <= index; i++) {
-                const id = `step-${steps[i].toLowerCase()}`;
-                const el = document.getElementById(id);
-                if (el) el.classList.add("active");
+            
+            for (let i = 0; i < index; i++) {
+                const el = document.getElementById(`step-${steps[i].toLowerCase()}`);
+                if (el) el.classList.add("completed");
             }
+
+           
+            const currentEl = document.getElementById(`step-${steps[index].toLowerCase()}`);
+            if (currentEl) currentEl.classList.add("current");
         }
     }
 

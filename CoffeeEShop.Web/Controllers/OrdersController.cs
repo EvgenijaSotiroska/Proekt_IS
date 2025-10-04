@@ -56,7 +56,7 @@ namespace CoffeeEShop.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> PlaceOrder()
+        public async Task<IActionResult> PlaceOrder(string Address)
         {
             var user = await _userManager.GetUserAsync(User);
             if (user == null) return NotFound();
@@ -64,9 +64,9 @@ namespace CoffeeEShop.Web.Controllers
             var order = _orderService.GetByUserId(Guid.Parse(user.Id));
             if (order != null)
             {
-                _orderService.CompleteOrder(order);
                 order.Status = "Pending";
                 order.CreatedAt = DateTime.UtcNow;
+                order.Address = Address;
                 _orderService.Update(order);
                 return RedirectToAction("Track", "Orders", new { id = order.Id });
             }
@@ -78,6 +78,14 @@ namespace CoffeeEShop.Web.Controllers
             var order = _orderService.GetById(id);
             if (order == null) return NotFound();
             return View(order);
+        }
+
+        public async Task<IActionResult> CompleteOrder(Guid id) 
+        {
+            var order = _orderService.GetById(id);
+            if (order == null) return NotFound();
+            _orderService.CompleteOrder(order);
+            return RedirectToAction("Index", "CoffeeShops");
         }
     }
 }

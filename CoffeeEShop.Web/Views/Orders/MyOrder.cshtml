@@ -2,7 +2,7 @@
 
 <style>
     .cart-container {
-        background-color: #f5f0e6; /* light beige */
+        background-color: #f5f0e6; 
         padding: 20px;
         border-radius: 12px;
         max-width: 700px;
@@ -11,15 +11,15 @@
     }
 
     .cart-header {
-        color: #5c3d2e; /* dark coffee brown */
-        border-bottom: 2px solid #d2b48c; /* tan */
+        color: #5c3d2e; 
+        border-bottom: 2px solid #d2b48c; 
         padding-bottom: 10px;
         margin-bottom: 20px;
     }
 
     .cart-item {
-        background-color: #fffaf3; /* very light cream */
-        border: 1px solid #d2b48c; /* tan */
+        background-color: #fffaf3; 
+        border: 1px solid #d2b48c; 
         border-radius: 8px;
         padding: 12px 16px;
         margin-bottom: 10px;
@@ -41,7 +41,7 @@
         margin-top: 20px;
         font-size: 1.2rem;
         font-weight: bold;
-        color: #3e2723; /* deep brown */
+        color: #3e2723; 
     }
 
     .btn-coffee {
@@ -54,7 +54,7 @@
     }
 
         .btn-coffee:hover {
-            background-color: #6f4e37; /* darker coffee */
+            background-color: #6f4e37; 
         }
 </style>
 
@@ -86,11 +86,20 @@
             <span>@Model.Sum(i => i.Price * i.Quantity)$</span>
         </div>
         <div style="display: flex; gap: 10px; margin-top: 15px;">
-            <form asp-action="PlaceOrder" method="post">
-                <button type="submit" class="btn btn-coffee">Place Order</button>
+            <form asp-action="PlaceOrder" method="post" style="margin-bottom: 15px;">
+                <div class="mb-3">
+                    <label for="Address" style="color: #5c3d2e;">Delivery Address:</label>
+                    <input type="text" id="Address" name="Address" class="form-control"
+                           placeholder="Enter your address" required
+                           style="background-color:#fffaf3; border:1px solid #d2b48c; color:#3e2723;" />
+                </div>
+
+                <div style="display: flex; gap: 10px;">
+                    <button type="submit" class="btn btn-coffee">Place Order</button>
+                    <a asp-controller="CoffeeShops" asp-action="Index" class="btn btn-coffee">Continue Shopping</a>
+                </div>
             </form>
 
-            <a asp-controller="CoffeeShops" asp-action="Index" class="btn btn-coffee">Continue Shopping</a>
         </div>
     }
 </div>
